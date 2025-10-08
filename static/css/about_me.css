@@ -1,0 +1,230 @@
+/* =======================================
+   General Styles
+   ======================================= */
+body {
+    font-family: "Courier New", monospace;
+    margin: 0;
+    padding: 0;
+    background: var(--bg-color);
+    color: var(--text-color);
+    transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+/* =======================================
+   Theme Variables (Light Mode)
+   ======================================= */
+:root {
+    --bg-color: #f5f5f5;
+    --text-color: #222;
+    --card-border-color: #0077cc;
+    --card-bg: rgba(255, 255, 255, 0.8);
+    --nav-footer-bg: rgba(255, 255, 255, 0.2);
+    --footer-text-color: #222;
+}
+
+/* =======================================
+   Theme Variables (Dark Mode)
+   ======================================= */
+.dark-mode {
+    --bg-color: #121212;
+    --text-color: #ffffff;
+    --card-border-color: transparent;
+    --card-bg: #1e1e1e;
+    --nav-footer-bg: #2a2a2a;
+    --footer-text-color: #ffffff;
+}
+
+/* =======================================
+   Navbar & Footer Styles
+   ======================================= */
+.custom-navbar {
+    background: var(--nav-footer-bg);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    color: var(--footer-text-color);
+    font-weight: bolder;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .custom-navbar, .dark-mode .footer {
+    color: #ffffff;
+    background: rgba(42, 42, 42, 0.2);
+    border-bottom: none;
+}
+
+/* =======================================
+   Card Styles
+   ======================================= */
+.card {
+    background: var(--card-bg);
+    border: 2px solid var(--card-border-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    backdrop-filter: blur(5px);
+    color: var(--text-color);
+}
+
+.dark-mode .card {
+    border: none;
+}
+
+/* =======================================
+   Profile Picture
+   ======================================= */
+#profile_pic {
+    border: 2px solid var(--card-border-color);
+    display: block;
+    margin: 0 auto;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    box-shadow: 0px 0px 8px rgba(0, 119, 204, 0.3);
+}
+
+.dark-mode #profile_pic {
+    border: none;
+    box-shadow: none;
+}
+
+/* =======================================
+   Links & Social Media
+   ======================================= */
+.nav-links a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 5px;
+    transition: color 0.3s ease-in-out;
+}
+
+.nav-links a:hover {
+    color: #0077cc;
+    font-weight: bolder;
+}
+
+.social_links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 10px;
+    list-style: none;
+}
+
+.social_links a {
+    text-decoration: none;
+    font-size: 20px;
+    color: var(--text-color);
+    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+}
+
+.social_links a:hover {
+    color: #0077cc;
+    transform: scale(1.2);
+    border-color: #0077cc;
+}
+
+/* =======================================
+   Dark Mode Toggle Button
+   ======================================= */
+.mode-toggle {
+    background: #222;
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px 15px;
+    cursor: pointer;
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    transition: all 0.3s ease-in-out;
+}
+
+.mode-toggle:hover {
+    background: #444;
+    color: #0077cc;
+    border-color: #0077cc;
+}
+
+.dark-mode .mode-toggle {
+    background: #fff;
+    color: #222;
+    border-color: #222;
+}
+
+.dark-mode .mode-toggle:hover {
+    background: #0077cc;
+    color: #222;
+}
+
+/* =======================================
+   Brand Logo
+   ======================================= */
+.brand {
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    color: var(--text-color);
+    padding: 5px 10px;
+    text-align: center;
+}
+
+.brand:hover {
+    color: #0077cc;
+    font-weight: bolder;
+}
+
+/* =======================================
+   Job Title Styling
+   ======================================= */
+.text_color_blue {
+    color: #0077cc;
+}
+
+#job_desg_element {
+    font-weight: bold;
+    color: #0077cc;
+    text-decoration: underline;
+    padding: 5px 0;
+    text-shadow: rgba(255, 255, 255, 0.3);
+    display: inline-block;
+}
+
+.footer {
+    background: var(--nav-footer-bg);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--footer-text-color);
+    font-size: 14px;
+    border-top: 1px solid #ccc;
+    margin-top: 20px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+    text-align: center;
+}

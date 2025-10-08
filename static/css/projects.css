@@ -1,0 +1,281 @@
+/* General body styling */
+
+
+html, body {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Source Code Pro', monospace;
+    background: linear-gradient(to right, #121212, #1a1a1a);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    z-index: -1;
+}
+
+
+
+main {
+    flex: 1;
+    min-height: 100%;
+    border-bottom: 1px solid black;
+    padding-bottom: 0;
+    flex-grow: 1; /* Takes only the remaining space */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Adjust if needed */
+    width: 100%;
+    min-height: auto !important; /* Prevents forced height */
+
+}
+
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Prevent interaction */
+    z-index: -1; /* Keeps it as a background element */
+}
+
+
+
+/* Section styling for card layout */
+section > div {
+  display: flex;
+  justify-content: center; /* Align cards horizontally */
+  gap: 20px; /* Add spacing between cards */
+  flex-wrap: wrap; /* Ensure cards wrap on smaller screens */
+  padding-bottom: 0px; /* Add padding around the section */
+}
+
+/* Navbar Styling */
+.custom-navbar {
+  background: rgba(34, 34, 34, 0.3); /* Transparent dark background */
+  padding: 10px 20px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5); /* Shadow effect */
+  position: sticky; /* Keeps navbar fixed at the top */
+  top: 0;
+  z-index: 1000;
+  overflow: hidden; /* Hides horizontal scrollbar on mobile */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, overflow 0.3s ease; /* Smooth transitions */
+  -webkit-backdrop-filter: blur(5px); /* Safari compatibility */
+  backdrop-filter: blur(1px); /* Blur effect */
+}
+
+
+.nav-container {
+  display: flex;
+  justify-content: space-between; /* Space out brand and links */
+  align-items: center;
+}
+
+.nav-brand .brand {
+  font-size: 24px;
+  color: #00ffcc; /* Neon accent for branding */
+  text-transform: uppercase;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 15px; /* Space between navbar links */
+  padding: 0;
+  margin: 0;
+}
+
+.nav-links li {
+  display: inline-block;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+  transition: color 0.3s ease; /* Smooth hover transition */
+}
+
+.nav-links li a:hover {
+  color: #00ffcc; /* Neon hover effect */
+}
+
+.nav-links li a i {
+  margin-right: 5px; /* Add spacing between icons and text */
+}
+
+/* Header Styling */
+header h1 {
+  font-size: 36px;
+  text-align: center;
+  margin: 20px 0;
+  color: #00ffcc;
+  text-decoration: underline solid #00ffcc;
+  text-decoration-thickness: 2px;
+  margin-bottom: 2px;
+  margin-top: 3px;
+}
+
+/* Card Wrapper */
+
+.card-container {
+  display: flex;
+  margin-bottom: auto;
+  flex-wrap: wrap; /* Allows cards to wrap to the next row if needed */
+  gap: 30px; /* Space between cards */
+  justify-content: center; /* Align cards in the center of the container */
+  padding: 20px; /* Optional: Adds padding around the container */
+}
+
+
+.card {
+  position: relative;
+  width: 300px;
+  height: 350px;
+  margin: 0 15px 10px; /* Horizontal and vertical spacing */
+  perspective: 1500px; /* Adds depth */
+  border-radius: 10px; /* Smooth edges */
+  overflow: hidden;
+  background: #222; /* Base background for the card */
+  box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.9);
+  animation: glow 2s infinite;
+
+}
+
+/* Zoom-in & lift effect on hover */
+.card:hover {
+  transform: scale(1.05) translateY(-10px);
+}
+
+/* Hover color effect on text */
+.card:hover .card-front h3 {
+  color: #00ffcc; /* Change the title text color to cyan on hover */
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.9), 0 0 30px 10px rgba(0, 0, 0, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 20px 10px rgba(0, 0, 0, 1), 0 0 40px 15px rgba(0, 0, 0, 0.7);
+  }
+}
+
+
+/* Inner Content */
+.card-inner {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d; /* Enables 3D stacking */
+  transition: transform 0.5s;
+}
+
+/* Zoom Effect */
+.card:hover .card-inner {
+  transform: none; /* Rotates to show back */
+}
+
+/* Front and Back Faces */
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  text-align: center;
+}
+
+/* Front Face */
+.card-front {
+  background: #1a1a1a; /* Dark front background */
+  z-index: 1; /* Keeps front above back */
+}
+
+.card-front img {
+  width: 100%;
+  height: 85%;
+  object-fit: cover; /* Prevents distortion */
+  border-radius: 8px;
+}
+
+.card-front h3 {
+  position: absolute;
+  bottom: 10px; /* Ensures heading is at the bottom */
+  width: 100%;
+  text-align: center;
+  color: #ffffff;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+/* Back Face */
+.card-back {
+  background-color: rgba(34, 34, 34, 0.95); /* Slight transparency for the back */
+  color: #fff;
+  z-index: 1;
+  opacity: 0;  /* Hidden by default */
+  transform: rotateY(180deg);
+  transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+}
+
+/* Blur Overlay */
+.card::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  bottom: 0;
+  background: linear-gradient(to top, rgba(255, 0, 0, 0.6) 20%, rgba(255, 0, 0, 0) 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+}
+
+/* Show Back Side on Hover */
+.card:hover .card-back {
+  opacity: 1;
+  transform: translateY(0); /* Moves up to cover the front */
+}
+
+/* Show overlay & blur effect on hover */
+.card:hover::before {
+  opacity: 1;
+  backdrop-filter: blur(8px);
+}
+
+/* Call-to-Action Button */
+.cta-btn {
+  background-color: #222;
+  color: #00ffcc;
+  border: 2px solid #00ffcc;
+  padding: 12px 25px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 6px; /* Rounded button edges */
+}
+
+/* Footer Styling */
+footer {
+  height: 25px; /* Sets fixed height */
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.4); /* Optional: add background */
+  backdrop-filter: blur(3px);
+  color: #fff;
+  font-size: 15px;
+  margin: 0 auto;
+  align-self: flex-end;
+  margin-top: auto;
+}

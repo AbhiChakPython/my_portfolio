@@ -1,0 +1,417 @@
+/* General Styles */
+body {
+    background-color: #000;
+    color: #33ff33;
+    font-family: 'Courier New', monospace;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar Styles */
+.custom-navbar {
+    background-color: #1f1f1f;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 2px solid #33ff33;
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.spacer {
+    flex-grow: 1; /* Pushes nav-links to the right */
+}
+
+.brand {
+    font-size: 24px;
+    font-weight: bold;
+    color: #33ff33;
+    text-transform: uppercase;
+    margin-left: 20px;
+    transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
+}
+
+.brand:hover {
+    color: #00ffcc;
+    text-shadow: 0 0 10px #00ffcc;
+}
+
+.nav-links {
+    margin-left: 20px;
+}
+
+.nav-links-list {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-links-list li a {
+    color: #33ff33;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+    font-size: 16px;
+}
+
+.nav-links-list li a:hover {
+    color: #00ffcc;
+    text-shadow: 0 0 10px #00ffcc;
+}
+
+/* Section Header */
+.section-header {
+    text-align: center;
+    font-size: 24px;
+    margin: 40px auto;
+    border-bottom: 2px solid #33ff33;
+    display: block;  /* Change to block to allow full-width centering */
+    padding-bottom: 10px;
+    width: fit-content; /* Ensures it only takes required space */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Skills Section */
+.skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 40px;
+}
+
+.skill-card {
+    background-color: #111;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(51, 255, 51, 0.5);
+    transition: transform 0.3s ease-in-out;
+    width: 48%;
+    margin-bottom: 20px;
+}
+
+.skill-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(51, 255, 51, 0.8);
+}
+
+.skill-card h3 {
+    border-bottom: 2px solid #33ff33;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.skill-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.skill-card ul li {
+    padding: 5px 0;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.skill-card ul li i {
+    margin-right: 10px;
+}
+
+/* Tooltip Effect */
+.skill-card ul li::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    background: #33ff33;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 12px;
+    white-space: nowrap;
+    visibility: hidden;
+}
+
+.skill-card ul li:hover::before {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Progress Bars */
+.progress-container {
+    width: 80%;
+    background-color: #222;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.progress-bar {
+    height: 10px;
+    border-radius: 5px;
+    animation: fillProgress 2s ease-in-out;
+}
+
+/* Colors for Progress Bar */
+.expert { background-color: #33ff33; }
+.advanced { background-color: #ffaa00; }
+.intermediate { background-color: #ff4400; }
+
+@keyframes fillProgress {
+    from { width: 0; }
+    to { width: var(--progress-width); }
+}
+
+
+/* Expertise Section */
+.expertise-section {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.expertise-section h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    color: #33ff33;
+    border-bottom: 2px solid #33ff33;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+/* Progress Bars Container */
+.progress-bars {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 60%;
+    margin: auto;
+}
+
+/* Individual Progress Bar Container */
+.progress-bar-container {
+    width: 100%;
+    text-align: left;
+    font-size: 16px;
+    font-weight: bold;
+    color: #00ffff;
+}
+
+
+
+/* Progress Bar Background */
+.progress-container {
+    width: 100%;
+    height: 12px;
+    background-color: #333;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 5px;
+    box-shadow: 0 0 5px rgba(51, 255, 51, 0.5);
+}
+
+/* Progress Bar Fill */
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #33ff33, #00ffcc);
+    transition: width 1s ease-in-out;
+    border-radius: 6px;
+    box-shadow: 0 0 10px #33ff33;
+}
+
+/* Core Concepts Section */
+
+
+/* Expandable Core Concepts Section */
+.concepts-section {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.concept-item {
+    background-color: #222;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 10px auto;
+    width: 60%;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.concept-item:hover {
+    background-color: #33ff33;
+    color: black;
+}
+
+.circle-progress {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    margin-right: 10px;
+    background-color: #444;
+}
+
+
+.concepts-section {
+    text-align: center;
+    margin: 40px 0;
+    padding: 20px 0;
+}
+
+.concepts-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    max-width: 700px;
+    margin: auto;
+}
+
+.concept-card {
+    background: #1f1f1f;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    width: 250px;
+    transition: transform 0.3s ease-in-out;
+    box-shadow: 0 0 10px rgba(51, 255, 51, 0.5);
+}
+
+.concept-card:hover {
+    transform: scale(1.05);
+}
+
+.concept-card h3 {
+    margin-top: 15px;
+    font-size: 18px;
+    color: #33ff33;
+}
+
+.concept-description {
+    font-size: 14px;
+    color: #00ffff;
+    margin-top: 10px;
+}
+
+/* Circular Progress Bar */
+.circular-progress {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: conic-gradient(#33ff33 90deg, #222 0deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    transition: background 1s ease-in-out;
+    margin: 0 auto;
+}
+
+.circular-progress::before {
+    content: "";
+    position: absolute;
+    width: 70%;
+    height: 70%;
+    background: #1f1f1f;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.progress-value {
+    position: relative;
+    z-index: 2;
+    font-weight: bold;
+    text-align: center;
+    color: #33ff33;
+}
+
+.concepts-section h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    color: #33ff33;
+    border-bottom: 2px solid #33ff33;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.terminal-divider {
+    border: none;
+    height: 4px; /* 👈 Even thicker */
+    background: linear-gradient(to right, #33ff33, #090909, #33ff33); /* 👈 Very dark center */
+    box-shadow: 0 0 20px #33ff33, 0 0 30px #33ff33, 0 0 40px #33ff33; /* 👈 Strongest glow */
+    margin: 30px auto;
+    width: 90%;
+}
+
+
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #111;
+    color: #33ff33;
+    margin-top: 40px;
+    border-top: 2px solid #33ff33;
+}
+
+
+/* Two-column layout inside skill cards while keeping tooltips */
+.skill-card ul {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px 20px; /* row-gap, column-gap */
+    padding: 0;
+}
+
+.skill-card ul li {
+    position: relative; /* needed for tooltip positioning */
+    cursor: pointer;
+    padding-left: 18px; /* space for dot */
+}
+
+.skill-card ul li::before {
+    content: "•"; /* dot bullet */
+    color: #33ff33;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.skill-card ul li:hover::before {
+    content: attr(data-tooltip); /* keep tooltip on hover */
+    color: black;
+    background: #33ff33;
+    padding: 5px 10px;
+    border-radius: 5px;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 1;
+    visibility: visible;
+}

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Abhijit's Portfolio - About Me</title>
+
+    <!-- Bootstrap CSS (Keeping it for other elements if needed) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/about_me.css' %}"/>
+    <style>
+        body {
+            background: url("{% static 'images/background8.jpg' %}");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body class="about_me_page">
+<!-- Navbar (Updated: Removed Bootstrap classes interfering with dark mode) -->
+<nav class="custom-navbar">
+    <div class="nav-container">
+        <a class="brand" href="{% url 'about_me' %}">About Me</a>
+
+        <!-- Dark Mode Toggle (Moved inside the navbar for better UI) -->
+        <button class="mode-toggle" id="toggleMode" aria-label="Toggle Dark Mode">🌙 Dark Mode</button>
+
+        <div class="nav-links">
+            <a href="{% url 'home' %}"><i class="fas fa-home"></i>Home</a>
+            <a href="{% url 'projects' %}"><i class="fas fa-briefcase"></i> Projects</a>
+            <a href="{% url 'skills' %}"><i class="fas fa-code"></i> Skills</a>
+            <a href="{% url 'contact_me' %}"><i class="fas fa-envelope"></i>Contact Me</a>
+        </div>
+    </div>
+</nav>
+
+<!-- About Me Section (Unchanged) -->
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card text-center p-3 border-info equal-height">
+                <img id="profile_pic" src="{% static 'images/profile_picture.jpg' %}" class="rounded-circle" width="150"
+                     alt="Profile Picture">
+                <h4 class="mt-3">Hi, I'm <span class="text_color_blue"><strong>Abhijit</strong>!</span></h4>
+                <p>As a Passionate </p>
+                <p><span id="job_desg_element"></span></p>
+                <p> problem solver, and tech enthusiast.</p>
+                <hr>
+                <p>Results-driven Python Engineer with 3 years of experience delivering
+                enterprise-scale applications, cloud-native data solutions, and AI-driven
+                platforms.</p>
+                <p>Aside from building small projects I would love to enter a position where I can be a part of bigger
+                    team & learn from others with more experience than myself.</p>
+                <p>I break the code where I need to figure out why things work the way they do. Documentation is just a
+                    reference</p>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card p-4 border-info equal-height">
+                <h2><strong>My Journey into Development</strong></h2>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;Just three months after writing my first "Hello World" in C, I convinced my boss to let me revamp our
+                    outdated Employee Management System. That experience ignited my passion for problem-solving through
+                    code.</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;Since then, I've worked with various technologies, contributed to innovative projects, and embraced
+                    challenges that push my skills forward. I started my career as a software developer at a small
+                    tech startup in 2022. I quickly realized my
+                    passion for coding and decided to pursue a career in the field. I am currently working remotely as a
+                    software engineer. From this you will see that I'm someone that jumps before I can talk myself out
+                    of doing something
+                    scary.</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;Recognized for building resilient systems that improve
+                    performance, scalability, and reliability, while reducing operational
+                    costs and development cycles. Proven track record of enabling business
+                    impact through automation, data insights, and secure digital platforms
+                    across finance, retail, and logistics domains. Passionate about leveraging
+                    Python and modern engineering practices to create end-to-end solutions
+                    that drive measurable outcomes.</p>
+                <hr>
+                <h3>My Core Skills</h3>
+                <ul>
+                    <li> 💻 Full-Stack Development with Django, Flask, FastAPI & React (Basic)</li>
+                    <li> 🗄️  Database Management (SQL and NoSql)</li>
+                    <li> 🚀 API Development & Optimization</li>
+                    <li> 🎨 Frontend & UI/UX Enhancements & Responsive Design</li>
+                    <li> ⚙  Cloud and DevOps deployment and automation</li>
+                </ul>
+                <hr>
+                <h3>Future Goals</h3>
+                <p>I can learn just about anything by having a final product to tear apart piece by piece. I'm
+                    constantly learning new technologies and improving my skills. My next focus is mastering
+                    cloud-based deployments and DevOps practices.</p>
+                <hr>
+                <ul class="social_links d-flex gap-3">
+                    <li><a href="https://facebook.com" target="_blank"><i class="fa-brands fa-facebook fa-2x"></i></a>
+                    </li>
+                    <li><a href="https://github.com/AbhiChakPython" target="_blank"><i class="fa-brands fa-github fa-2x"></i></a></li>
+                    <li><a href="https://www.linkedin.com/in/chakraborty-gurupada-abhijit/" target="_blank"><i class="fa-brands fa-linkedin fa-2x"></i></a>
+                    </li>
+                    <li><a href="https://instagram.com" target="_blank"><i class="fa-brands fa-instagram fa-2x"></i></a>
+                    </li>wq
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer (Unchanged) -->
+<footer class="footer">
+    <p>&copy; 2025 Abhijit. All rights reserved.</p>
+</footer>
+
+<!-- JavaScript (Bootstrap + Popper) -->
+<script src="{% static 'scripts/about_me.js' %}"></script>
+<script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+<script>
+    var typed = new Typed('#job_desg_element', {
+      strings: ['FullStack Developer', '&amp; Data Engineer', '&amp; Web Developer', '&amp; Cloud DevOps Engineer',
+      '&amp; FrontEnd Developer', '&amp; Software Developer...'],
+      typeSpeed: 90,
+      backSpeed: 50,
+      loop: true,
+      cursorChar: '|',
+      startDelay: 500,
+      backDelay: 500,
+      showCursor: true,
+      smartBackspace: true,
+    });
+</script>
+</body>
+</html>
