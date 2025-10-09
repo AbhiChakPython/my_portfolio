@@ -28,8 +28,17 @@ else:
 
 # Production Database (PostgreSQL)
 # CRITICAL: Uses the DATABASE_URL environment variable provided by Railway
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL environment variable is required for production.")
+
 DATABASES = {
-    "default": dj_database_url.config(conn_max_age=600)
+    "default": dj_database_url.config(
+        default=DATABASE_URL,  # Force the use of the fetched ENV URL
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
 
 # Remove development-only apps and middleware
