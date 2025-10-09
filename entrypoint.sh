@@ -1,15 +1,16 @@
 #!/bin/bash
 
-# 1. Run Setup Commands
-# Collect static files
+# Define the production settings file
+# Set DJANGO_SETTINGS_MODULE environment variable explicitly
+export DJANGO_SETTINGS_MODULE='myportfolio.settings_prod'
+
+# 1. Run Setup Commands (using production settings)
 echo "Running collectstatic..."
 python manage.py collectstatic --noinput
 
-# Apply database migrations
 echo "Running migrations..."
 python manage.py migrate
 
 # 2. Start the Gunicorn Web Process
-# The 'exec' command replaces the current shell with Gunicorn, ensuring it's the main process.
-echo "Starting Gunicorn web server..."
+echo "Starting Gunicorn web server with $DJANGO_SETTINGS_MODULE..."
 exec gunicorn myportfolio.wsgi:application --bind 0.0.0.0:$PORT --workers 3 --timeout 60

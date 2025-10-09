@@ -6,7 +6,15 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myportfolio.settings')
+
+    # Use settings_prod if DJANGO_SETTINGS_MODULE is set, otherwise default to local settings
+    default_settings = 'myportfolio.settings'
+
+    if os.getenv('DJANGO_ENV') == 'production':
+        default_settings = 'myportfolio.settings_prod'
+
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', default_settings)
+
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
