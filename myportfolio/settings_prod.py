@@ -6,10 +6,9 @@ import os
 import dj_database_url
 
 # Import all base settings
-from .settings import *  # noqa
+from .settings import * # noqa
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# CRITICAL: If this environment variable is NOT set on Railway, the app will crash (502).
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # Set DEBUG to False in production
@@ -26,22 +25,53 @@ else:
     # Should not happen on Railway, but good safeguard
     ALLOWED_HOSTS = []
 
-# Production Database (PostgreSQL)
-# CRITICAL: Uses the DATABASE_URL environment variable provided by Railway
+# ==============================================================================
+# Database Configuration (Final Robust Check)
+# ==============================================================================
+
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-if not DATABASE_URL:
-    raise ValueError("DATABASE_URL environment variable is required for production.")
+if DATABASE_URL:
+    # Option 1: Use the full DATABASE_URL if available (preferred)
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
+    }
+    print("INFO: Using DATABASE_URL connection string.")
 
-DATABASES = {
-    "default": dj_database_url.config(
-        default=DATABASE_URL,  # Force the use of the fetched ENV URL
-        conn_max_age=600,
-        conn_health_checks=True,
+elif os.getenv("PGHOST") and os.getenv("PGUSER") and os.getenv("PGDATABASE"):
+    # Option 2: Fallback to individual Railway-injected PG_* variables
+    print("WARNING: DATABASE_URL not found. Constructing from PG_* variables.")
+
+    # Construct the URL using the guaranteed PG variables
+    db_url = (
+        f"postgres://{os.getenv('PGUSER')}:{os.getenv('PGPASSWORD')}@"
+        f"{os.getenv('PGHOST')}:{os.getenv('PGPORT')}/{os.getenv('PGDATABASE')}"
     )
-}
 
-# Remove development-only apps and middleware
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=db_url,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
+    }
+
+else:
+    # CRITICAL: If neither option works, raise an error to stop the deployment.
+    raise ValueError(
+        "CRITICAL: Production environment variables for PostgreSQL are missing. "
+        "Ensure the Postgres plugin is linked and variables (DATABASE_URL or PG_*) are injected."
+    )
+
+# ==============================================================================
+# Production Overrides
+# ==============================================================================
+
+# Remove development-only apps
 INSTALLED_APPS.remove('django_browser_reload')
 INSTALLED_APPS.remove('widget_tweaks')
 
