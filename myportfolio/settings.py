@@ -22,7 +22,13 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
 # Allowed hosts (use * in dev, explicit domain in prod)
-ALLOWED_HOSTS = [host.strip() for host in os.getenv("ALLOWED_HOSTS", "*").split(",") if host.strip()]
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "0.0.0.0",
+    ".railway.app",
+    "myportfolio-production-cc42.up.railway.app",
+]
 
 # Application definition
 INSTALLED_APPS = [

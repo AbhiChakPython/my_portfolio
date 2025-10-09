@@ -5,3 +5,5 @@ db.sqlite3
 *.log
 .env
 /staticfiles
+Dockerfile
+docker-compose.yml
