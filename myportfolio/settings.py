@@ -1,6 +1,6 @@
 """
 Base Django settings for myportfolio project.
-Designed for local development and base configuration.
+Designed for local development and base configuration, to be imported by settings_prod.py.
 """
 
 import os
@@ -11,17 +11,22 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load environment variables from .env file (for local testing only)
+# This ensures local settings are loaded when running manage.py locally.
 load_dotenv(BASE_DIR / '.env')
 
-# SECURITY WARNING: keep the secret key used in production secret!
-# Use a simple default key for local development
+# ==============================================================================
+# Django Core Settings - Local Defaults
+# ==============================================================================
+
+# SECURITY WARNING: Use a default key for local development.
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-local-dev-key")
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True  # Always True in the base/local settings file
+# DEBUG is TRUE in the base file. It MUST be explicitly set to False in settings_prod.py.
+DEBUG = True
 
-# Allowed hosts for local development
+# Allowed hosts for local development. Production hosts are handled in settings_prod.py.
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -32,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Dev-Only Tools (Keep here, remove from Prod settings)
+    # Dev-Only Tools (These will be removed in settings_prod.py)
     'django_browser_reload',
     'widget_tweaks',
 
@@ -41,7 +46,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # WhiteNoise is NOT used locally, only in production
+    # WhiteNoise is NOT used locally, only in production (in settings_prod.py)
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -49,7 +54,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    # Dev-Only Middleware
+    # Dev-Only Middleware (This will be removed in settings_prod.py)
     'django_browser_reload.middleware.BrowserReloadMiddleware',
 ]
 
@@ -73,7 +78,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'myportfolio.wsgi.application'
 
-# Database for local development (SQLite)
+# Database for local development (SQLite). Production config is in settings_prod.py
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -91,14 +96,14 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = os.getenv("TIME_ZONE", "Asia/Kolkata")
+TIME_ZONE = os.getenv("TIME_ZONE", "Asia/Kolkata") # Good practice to keep this configurable
 USE_I18N = True
 USE_TZ = True
 
 # Static files for local development
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-# STATIC_ROOT is not set locally
+# STATIC_ROOT and storage are handled in settings_prod.py
 
 # Media files
 MEDIA_URL = '/media/'
