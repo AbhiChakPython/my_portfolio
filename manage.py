@@ -7,19 +7,13 @@ import sys
 def main():
     """Run administrative tasks."""
 
-    # --- Aligning settings module selection with working projects ---
-    # Read DJANGO_ENV from the environment, defaulting to 'dev'.
-    django_env = os.environ.get('DJANGO_ENV', 'dev').lower()
+    # This simplified version RELIES on the environment (e.g., Railway Build/Start Command)
+    # to set DJANGO_SETTINGS_MODULE to either 'myportfolio.settings' (local)
+    # or 'myportfolio.settings_prod' (deployment).
 
-    if django_env == 'prod':
-        # Load production settings for Railway deployment
-        settings_module = 'myportfolio.settings_prod'
-    else:
-        # Load default settings for local development
-        settings_module = 'myportfolio.settings'
-
+    # Fallback to the default settings for local development if nothing is explicitly set.
+    settings_module = os.environ.get('DJANGO_SETTINGS_MODULE', 'myportfolio.settings')
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings_module)
-    # --- End settings module selection ---
 
     try:
         from django.core.management import execute_from_command_line
@@ -29,7 +23,6 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
-
     execute_from_command_line(sys.argv)
 
 
