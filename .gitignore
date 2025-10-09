@@ -3,7 +3,13 @@ __pycache__/
 db.sqlite3
 *.sqlite3
 *.log
-.env
+.env.prod
+.env.dev
 /staticfiles
 Dockerfile
 docker-compose.yml
+settings_dev.py
+.venv
+/venv
+/logs
+.idea/

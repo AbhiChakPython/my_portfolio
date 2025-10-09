@@ -1,91 +1,106 @@
-"""
-Django production settings for myportfolio project on Railway.
-Overrides base settings with production-specific values.
-"""
-import os
+from .settings import *  # Import all base settings
 import dj_database_url
-from whitenoise.storage import CompressedManifestStaticFilesStorage
+import os
 
-# Import all base settings (includes INSTALLED_APPS, MIDDLEWARE, TEMPLATES, BASE_DIR)
-from .settings import * # noqa
-
-# ==============================================================================
-# Production Overrides
-# ==============================================================================
-
-# SECURITY WARNING: Use environment variable key, ensuring it's set
+# ===============================
+# Production Core Settings
+# ===============================
 SECRET_KEY = os.getenv("SECRET_KEY")
 if not SECRET_KEY:
     raise ValueError("SECRET_KEY environment variable not found in production!")
 
-# Set DEBUG to False in production
-DEBUG = False
+DEBUG = os.getenv("DEBUG", "False").lower() in ["true", "1", "yes"]
 
-# CRITICAL: Read ALLOWED_HOSTS from the environment variable provided by Railway.
+# ALLOWED_HOSTS from Railway environment variable
 allowed_hosts_str = os.getenv("ALLOWED_HOSTS")
 if allowed_hosts_str:
     ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_str.split(',') if host.strip()]
 else:
     ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.up.railway.app']
 
-# ==============================================================================
-# Database Configuration (Final WORKING Logic)
-# ==============================================================================
-
+# ===============================
+# Database (PostgreSQL via DATABASE_URL)
+# ===============================
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if DATABASE_URL:
-    # Use the full URL if available (This is for the gunicorn and migrate commands)
     DATABASES = {
         "default": dj_database_url.config(
             default=DATABASE_URL,
-            conn_max_age=600,
+            conn_max_age=int(os.getenv("DB_CONN_MAX_AGE", 600)),
+            ssl_require=os.getenv("DB_SSL_REQUIRED", "True").lower() in ["true", "1", "yes"],
             conn_health_checks=True,
         )
     }
-    print("INFO: Successfully configured PostgreSQL via DATABASE_URL.")
 else:
-    # 💡 CRITICAL FIX: Use SQLite fallback for commands like 'collectstatic'
-    # when the environment variable link is delayed or missing during the build phase.
+    # Fallback SQLite for dummy build (rarely used in prod)
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db-dummy-build.sqlite3",
         }
     }
-    print("INFO: Using SQLite dummy DB config (DATABASE_URL not yet resolved).")
 
+# ===============================
+# Remove dev-only apps/middleware
+# ===============================
+for app in ['django_browser_reload', 'widget_tweaks']:
+    if app in INSTALLED_APPS:
+        INSTALLED_APPS.remove(app)
 
-# ==============================================================================
-# Production Setup & Cleanup
-# ==============================================================================
-
-# Remove development-only apps/middleware imported from base settings
-try:
-    INSTALLED_APPS.remove('django_browser_reload')
-except ValueError:
-    pass
-try:
-    INSTALLED_APPS.remove('widget_tweaks')
-except ValueError:
-    pass
-try:
+if 'django_browser_reload.middleware.BrowserReloadMiddleware' in MIDDLEWARE:
     MIDDLEWARE.remove('django_browser_reload.middleware.BrowserReloadMiddleware')
-except ValueError:
-    pass
 
-# Production Static Files (WhiteNoise setup)
-# 1. Add WhiteNoise middleware for serving files
+# ===============================
+# Whitenoise for static files
+# ===============================
 MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
-# 2. Define where collected static files will live
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-# 3. Use WhiteNoise storage backend for compression and caching
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Security settings
+# ===============================
+# Security Settings
+# ===============================
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = os.getenv("SECURE_SSL_REDIRECT", "False").lower() in ["true", "1", "yes"]
-SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "False").lower() in ["true", "1", "yes"]
-CSRF_COOKIE_SECURE = os.getenv("CSRF_COOKIE_SECURE", "False").lower() in ["true", "1", "yes"]
+SECURE_SSL_REDIRECT = os.getenv("SECURE_SSL_REDIRECT", "True").lower() in ["true", "1", "yes"]
+SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "True").lower() in ["true", "1", "yes"]
+CSRF_COOKIE_SECURE = os.getenv("CSRF_COOKIE_SECURE", "True").lower() in ["true", "1", "yes"]
+
+# ===============================
+# Static & Media
+# ===============================
+# STATIC_ROOT already set above for Whitenoise
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# ===============================
+# Optional: Logging (production-ready)
+# ===============================
+LOG_DIR = BASE_DIR / 'logs'
+LOG_DIR.mkdir(exist_ok=True, parents=True)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {'format': '[{asctime}] {levelname} {name}: {message}', 'style': '{'},
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': LOG_DIR / 'application.log',
+            'when': 'midnight',
+            'backupCount': 7,
+            'formatter': 'verbose',
+            'encoding': 'utf-8',
+        },
+    },
+    'root': {'handlers': ['file'], 'level': 'WARNING'},
+}
+
+# ===============================
+# Third-party services (example)
+# ===============================
+RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID")
+RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET")

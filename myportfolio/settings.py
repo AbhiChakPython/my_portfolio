@@ -1,34 +1,30 @@
-"""
-Base Django settings for myportfolio project.
-Designed for local development and base configuration, to be imported by settings_prod.py.
-"""
-
 import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# ===============================
+# Base Directory
+# ===============================
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load environment variables from .env file (for local testing only)
-load_dotenv(BASE_DIR / '.env')
+# ===============================
+# Load Environment Variables (Dev Only)
+# ===============================
+if os.getenv("DJANGO_ENV", "dev").lower() == "dev":
+    load_dotenv(BASE_DIR / ".env.dev")  # Load local dev env vars
 
-# ==============================================================================
-# Django Core Settings - Local Defaults
-# ==============================================================================
-
-# SECURITY WARNING: Use a default key for local development.
+# ===============================
+# Core Settings
+# ===============================
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-local-dev-key")
+DEBUG = os.getenv("DEBUG", "True").lower() in ["true", "1", "yes"]
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,0.0.0.0").split(",")
 
-# DEBUG is TRUE in the base file. It MUST be explicitly set to False in settings_prod.py.
-DEBUG = True
-
-# Allowed hosts for local development. Production hosts are handled in settings_prod.py.
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
-
-
-# Application definition
+# ===============================
+# Installed Apps
+# ===============================
 INSTALLED_APPS = [
+    # Default Django
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -36,20 +32,22 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Local Apps
     'base_app',
 ]
 
-# 💡 CRITICAL FIX: Only include dev-only apps if DEBUG is True (i.e., local development).
+# Dev-only apps
 if DEBUG:
     INSTALLED_APPS += [
         'django_browser_reload',
         'widget_tweaks',
     ]
 
-
+# ===============================
+# Middleware
+# ===============================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # WhiteNoise is NOT used locally, only in production (in settings_prod.py)
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -58,15 +56,20 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# 💡 CRITICAL FIX: Only include dev-only middleware if DEBUG is True (i.e., local development).
 if DEBUG:
     MIDDLEWARE += [
         'django_browser_reload.middleware.BrowserReloadMiddleware',
     ]
 
-
+# ===============================
+# URLs and WSGI
+# ===============================
 ROOT_URLCONF = 'myportfolio.urls'
+WSGI_APPLICATION = 'myportfolio.wsgi.application'
 
+# ===============================
+# Templates
+# ===============================
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -83,9 +86,42 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'myportfolio.wsgi.application'
+# ===============================
+# Authentication
+# ===============================
+AUTH_PASSWORD_VALIDATORS = [
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
+]
 
-# Database for local development (SQLite). Production config is in settings_prod.py
+# ===============================
+# Internationalization
+# ===============================
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = os.getenv("TIME_ZONE", "Asia/Kolkata")
+USE_I18N = True
+USE_TZ = True
+
+# ===============================
+# Static & Media
+# ===============================
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# ===============================
+# Default Primary Key
+# ===============================
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ===============================
+# Database (will be overridden in dev/prod)
+# ===============================
+# This is a placeholder: actual DATABASES will be set in settings_dev.py or settings_prod.py
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -93,28 +129,28 @@ DATABASES = {
     }
 }
 
-# Password validation (default)
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', },
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', },
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', },
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },
-]
+# ===============================
+# Logging (optional base setup)
+# ===============================
+LOG_DIR = BASE_DIR / 'logs'
+LOG_DIR.mkdir(exist_ok=True, parents=True)
 
-# Internationalization
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = os.getenv("TIME_ZONE", "Asia/Kolkata") # Good practice to keep this configurable
-USE_I18N = True
-USE_TZ = True
-
-# Static files for local development
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-# STATIC_ROOT and storage are handled in settings_prod.py
-
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
-# Default primary key field type
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {'format': '[{asctime}] {levelname} {name}: {message}', 'style': '{'},
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': LOG_DIR / 'application.log',
+            'when': 'midnight',
+            'backupCount': 7,
+            'formatter': 'verbose',
+            'encoding': 'utf-8',
+        },
+    },
+    'root': {'handlers': ['file'], 'level': 'WARNING'},
+}
