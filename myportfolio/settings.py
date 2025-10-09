@@ -11,7 +11,6 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load environment variables from .env file (for local testing only)
-# This ensures local settings are loaded when running manage.py locally.
 load_dotenv(BASE_DIR / '.env')
 
 # ==============================================================================
@@ -37,12 +36,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Dev-Only Tools (These will be removed in settings_prod.py)
-    'django_browser_reload',
-    'widget_tweaks',
-
     'base_app',
 ]
+
+# 💡 CRITICAL FIX: Only include dev-only apps if DEBUG is True (i.e., local development).
+if DEBUG:
+    INSTALLED_APPS += [
+        'django_browser_reload',
+        'widget_tweaks',
+    ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -53,10 +56,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    # Dev-Only Middleware (This will be removed in settings_prod.py)
-    'django_browser_reload.middleware.BrowserReloadMiddleware',
 ]
+
+# 💡 CRITICAL FIX: Only include dev-only middleware if DEBUG is True (i.e., local development).
+if DEBUG:
+    MIDDLEWARE += [
+        'django_browser_reload.middleware.BrowserReloadMiddleware',
+    ]
+
 
 ROOT_URLCONF = 'myportfolio.urls'
 
